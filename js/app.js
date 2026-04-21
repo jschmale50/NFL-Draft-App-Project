@@ -41,18 +41,16 @@ const $ = id => document.getElementById(id);
 const el = (tag, cls, html) => { const e = document.createElement(tag); if(cls) e.className = cls; if(html) e.innerHTML = html; return e; };
 
 // ---- Boot ----
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const res = await fetch('./data/draft-2026.json');
-    if (!res.ok) throw new Error('fetch failed');
-    draftData = await res.json();
-    populateFilters();
-    setupListeners();
-    setupConfetti();
-    renderView('board');
-  } catch(err) {
-    $('mainContent').innerHTML = `<div class="empty-state" style="padding:80px;">⚠️ Could not load draft data.<br><small style="font-size:13px;color:#4A5568;">Make sure you're running from a local server (e.g. npx serve .)</small></div>`;
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof window.DRAFT_DATA === 'undefined') {
+    $('mainContent').innerHTML = `<div class="empty-state" style="padding:80px;">⚠️ Could not load draft data.<br><small style="font-size:13px;color:#4A5568;">Make sure draft-data.js loaded correctly.</small></div>`;
+    return;
   }
+  draftData = window.DRAFT_DATA;
+  populateFilters();
+  setupListeners();
+  setupConfetti();
+  renderView('board');
 });
 
 // ---- Setup ----
