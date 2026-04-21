@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 NFL Draft Tracker — Pittsburgh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <canvas id="confettiCanvas"></canvas>
+
+  <header class="app-header">
+    <div class="header-left">
+      <div class="header-logo">
+        <span class="logo-nfl">NFL</span>
+        <span class="logo-draft">DRAFT</span>
+        <span class="logo-year">2026</span>
+      </div>
+      <div class="header-location">
+        <span class="location-city">PITTSBURGH, PA</span>
+        <span class="location-dot">·</span>
+        <span class="location-dates">APRIL 23–25</span>
+      </div>
+    </div>
+    <div class="header-center">
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        LIVE
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/><path d="M13.5 13.5L17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" id="globalSearch" class="search-input" placeholder="Search players, teams, colleges…">
+        <button class="search-clear hidden" id="searchClear">✕</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="main-nav">
+    <button class="nav-tab active" data-view="board">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 6a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2zm0 6a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z"/></svg>
+      THE BOARD
+    </button>
+    <button class="nav-tab" data-view="teams">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/></svg>
+      TEAMS
+    </button>
+    <button class="nav-tab" data-view="remaining">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+      REMAINING
+    </button>
+    <button class="nav-tab" data-view="trades">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"/></svg>
+      TRADES
+    </button>
+    <button class="nav-tab" data-view="stats">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+      BY POSITION
+    </button>
+  </nav>
+
+  <main id="mainContent">
+
+    <!-- BOARD VIEW -->
+    <div id="boardView" class="view active">
+      <div class="board-controls">
+        <div class="round-selector">
+          <button class="round-btn active" data-round="1">RD 1</button>
+          <button class="round-btn" data-round="2">RD 2</button>
+          <button class="round-btn" data-round="3">RD 3</button>
+          <button class="round-btn" data-round="4">RD 4</button>
+          <button class="round-btn" data-round="5">RD 5</button>
+          <button class="round-btn" data-round="6">RD 6</button>
+          <button class="round-btn" data-round="7">RD 7</button>
+        </div>
+        <div class="board-filters">
+          <select id="boardPosFilter" class="filter-select">
+            <option value="">All Positions</option>
+            <option value="QB">QB</option>
+            <option value="WR">WR</option>
+            <option value="RB">RB</option>
+            <option value="TE">TE</option>
+            <option value="OT">OT</option>
+            <option value="OG">OG</option>
+            <option value="EDGE">EDGE</option>
+            <option value="DT">DT</option>
+            <option value="LB">LB</option>
+            <option value="CB">CB</option>
+            <option value="S">S</option>
+          </select>
+          <select id="boardTeamFilter" class="filter-select">
+            <option value="">All Teams</option>
+          </select>
+        </div>
+      </div>
+      <div id="picksGrid" class="picks-grid"></div>
+    </div>
+
+    <!-- TEAMS VIEW -->
+    <div id="teamsView" class="view">
+      <div class="teams-controls">
+        <div class="team-selector-wrap">
+          <label class="selector-label">SELECT TEAM</label>
+          <div class="team-carousel" id="teamCarousel"></div>
+        </div>
+      </div>
+      <div id="teamDetail" class="team-detail"></div>
+    </div>
+
+    <!-- REMAINING VIEW -->
+    <div id="remainingView" class="view">
+      <div class="remaining-header">
+        <div class="remaining-title">
+          <h2>UNDRAFTED PROSPECTS</h2>
+          <span id="remainingCount" class="remaining-count"></span>
+        </div>
+        <div class="remaining-filters">
+          <input type="text" id="remainingSearch" class="filter-input" placeholder="Search prospects…">
+          <select id="remainingPosFilter" class="filter-select">
+            <option value="">All Positions</option>
+            <option value="QB">QB</option>
+            <option value="WR">WR</option>
+            <option value="RB">RB</option>
+            <option value="TE">TE</option>
+            <option value="OT">OT</option>
+            <option value="OG">OG</option>
+            <option value="EDGE">EDGE</option>
+            <option value="DT">DT</option>
+            <option value="LB">LB</option>
+            <option value="CB">CB</option>
+            <option value="S">S</option>
+          </select>
+          <input type="text" id="remainingCollegeFilter" class="filter-input" placeholder="College…">
+        </div>
+      </div>
+      <div id="prospectsTable" class="prospects-table"></div>
+    </div>
+
+    <!-- TRADES VIEW -->
+    <div id="tradesView" class="view">
+      <div class="trades-header">
+        <h2>TRADE TRACKER</h2>
+        <p class="trades-subtitle">All draft pick transactions from the 2026 NFL Draft</p>
+      </div>
+      <div id="tradesList" class="trades-list"></div>
+    </div>
+
+    <!-- STATS VIEW -->
+    <div id="statsView" class="view">
+      <div class="stats-header">
+        <h2>POSITION BREAKDOWN</h2>
+        <p class="stats-subtitle">How many players at each position were selected, and where</p>
+      </div>
+      <div id="statsContent" class="stats-content"></div>
+    </div>
+
+  </main>
+
+  <!-- PICK DETAIL MODAL -->
+  <div id="pickModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-panel">
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      <div id="modalContent" class="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
